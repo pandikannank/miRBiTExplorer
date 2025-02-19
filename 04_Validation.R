@@ -1,3 +1,7 @@
+
+# 04_Validation -----------------------------------------------------------
+
+
 #This code will reproduce the pre-processing of Validation Data and the classifier performance
 #Fig-5A,5B,5D,5F,5H can be generated.
 
@@ -764,7 +768,7 @@ metadesc_GSE120584$class <- meta_GSE120584_h$class
 
 metadesc_GSE120584$description <- metadesc_GSE120584$state
 
-# Create a named vector for replacements
+# Create a named vector for replacements for shorter better visualization
 replacement_map_GSE120584 <- c(
   "AD" = "Alzheimer's disease",
   "VaD" = "Vascular Dementia",
@@ -921,7 +925,7 @@ ggplot(summary_data_val, aes(x = dataset, y = description, fill = class)) +
     legend.text = element_text(face = "bold", size = 16)                         # Bold legend text
   )
 
-ggsave("Figures/5A_validationdistribution_reduced.png")
+ggsave("../results/Figures/5A_validationdistribution_reduced.png", dpi = 600,  height = 8, width = 10)
 
 
 # 5B_Confusion Matrices_Validation -------------------------------------------
@@ -946,12 +950,10 @@ all_cm_validation <- do.call(rbind, lapply(names(confusion_matrices_validation),
   cm  # return modified data frame
 }))
 
-# Now plot with ggplot
-library(ggplot2)
 
 ggplot(all_cm_validation, aes(x = Prediction, y = Reference, fill = Freq)) +
   geom_tile(color = "white") +
-  geom_text(aes(label = Freq), color = "black", fontface = "bold", size = 10) +  # Bold the text in tiles
+  geom_text(aes(label = Freq), color = "black", fontface = "bold", size = 7) +  # Bold the text in tiles
   facet_wrap(~ Dataset, ncol = 2) +
   scale_fill_gradient(low = "lavender", high = "lightblue") +
   theme_minimal() +
@@ -968,7 +970,7 @@ ggplot(all_cm_validation, aes(x = Prediction, y = Reference, fill = Freq)) +
     legend.title = element_text(face = "bold", size = 16)  # Bold and increase legend title size
   )
 
-ggsave("Figures/5B_Confusion_Matrix_withValidation.png")
+ggsave("../results/Figures/5B_Confusion_Matrix_withValidation.png", dpi = 600, height = 8, width = 8)
 
 # 5D_Incorrect_Validation -------------------------------------------------
 
@@ -1057,7 +1059,7 @@ ggplot(incorrect_samples_validation_combined, aes(x = dataset, y = description, 
     legend.title = element_blank()
   )
 # Save the plot for validation datasets
-ggsave("Figures/5D_incorrectplots_validation_benign_marked.png")
+ggsave("../results/Figures/5D_incorrectplots_validation_benign_marked.png", height = 8, width = 14)
 
 # 5F_Test_IncorrectPlots -----------------------------------------------------
 
@@ -1113,8 +1115,6 @@ ggplot(combined_data_inc, aes(x = Dataset, y = Sample, fill = Correct)) +
         axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for clarity
 
 
-# Ensure dplyr is loaded
-library(dplyr)
 
 # Initialize a list to store the incorrect samples for each dataset
 incorrect_samples_all <- list()
@@ -1174,7 +1174,6 @@ incorrect_samples_all_combined <- incorrect_samples_all_combined %>%
     )
   )
 
-library(dplyr)
 # Process the combined data: Calculate counts and color
 incorrect_samples_all_combined <- incorrect_samples_all_combined %>%
   group_by(dataset, description.x) %>%
@@ -1217,7 +1216,7 @@ ggplot(incorrect_samples_all_combined, aes(x = dataset, y = description.x, fill 
     legend.title = element_blank()
   )
 
-ggsave("Figures/5F_incorrectpplots_benign_marked.png")
+ggsave("../results/Figures/5F_incorrectpplots_benign_marked.png", dpi = 600, height = 12, width = 18)
 
 # 5H_Incorrect_Train ------------------------------------------------------
 
@@ -1226,12 +1225,33 @@ meta_train_inc$description <- metadata.subset_GSE211692$state
 
 meta_train_inc[1:8,1:2]
 
-metafull
-
-
 metafull <- rownames_to_column(meta_train_inc, var = "Sample")
 meta_train_inc <- rownames_to_column(meta_train_inc, var = "Sample")
 meta_train_inc$Sample <- trimws(meta_train_inc$Sample)
+
+metaplot_train <- as.data.frame(meta_train)
+metaplot_train$Sample <- rownames(meta_train)
+rownames(metaplot_train) <- NULL
+
+# Prepare predictions from results
+predictions_train <- data.frame(
+  Sample = rownames(results_train),  # Use row names as Sample names
+  Prediction = results_train$max_score
+)
+head(predictions_train)
+
+metaplot_train <- metaplot_train %>%
+  rename(actual_label = class)
+
+# Merge the actual labels with predictions
+predictions_train <- predictions_train %>%
+  left_join(metaplot_train, by = "Sample")
+
+prediction_outcomes_train <- predictions_train %>%
+  mutate(Correct = ifelse(actual_label == Prediction, "Correct", "Incorrect"))
+head(prediction_outcomes_train)
+table(prediction_outcomes_train$Correct)
+
 prediction_outcomes_train$Sample <- trimws(prediction_outcomes_train$Sample)
 
 # Merge prediction outcomes with metadata using 'Sample' as the key
@@ -1240,10 +1260,8 @@ merged_data <- merge(prediction_outcomes_train, meta_train_inc, by = "Sample", a
 head(merged_data)
 
 
-# Filter only the incorrect predictions
-incorrect_data <- merged_data %>%
-  filter(Correct != "Correct") %>%
-  select(Sample, description, Correct)
+incorrect_data <- merged_data[merged_data$Correct != "Correct", c("Sample", "description", "Correct")]
+
 
 # Calculate counts for each description
 description_distribution <- merged_data %>%
@@ -1280,7 +1298,7 @@ ggplot(description_distribution_split, aes(x = count, y = reorder(description, c
   scale_x_continuous(expand = c(0, 0), limits = c(0, 350))  # Reduce the x-axis length
 
 
-ggsave("Figures/5H_incorrectdistribution_train.png")
+ggsave("../results/Figures/5H_incorrectdistribution_train.png", dpi = 600, height = 8, width = 12)
 
 
 # Validation_merged -------------------------------------------------------
@@ -1339,12 +1357,10 @@ confusion_validation_merged <- caret::confusionMatrix(
 print(confusion_validation_merged)
 plot_confusion_matrix(confusion_validation_merged, "Confusion Matrix for all Validation Datasets")
 
-ggsave("Figures/confusion_validation_mergeddatasets.png")
+ggsave("../results/Figures/confusion_validation_mergeddatasets.png")
 
-# Select class and description columns from combined_data_val
-descrip_val <- combined_data_val %>%
-  select(class, description, dataset)
-head(descrip_val, 5)
+
+descrip_val <- combined_data_val[, c("class", "description", "dataset")]
 
 
 unique_descriptions_val <- unique(descrip_val$description)
@@ -1404,7 +1420,7 @@ color_map <- c(
 
 ref_colors <- c("cancer" = "red", "non_cancer" = "blue")
 
-png('validation_merged.png', res = 600, units = "in", width = 16, height = 10, bg = "white")
+png('../results/Figures/validation_merged.png', res = 600, units = "in", width = 16, height = 10, bg = "white")
 
 # Plot the heatmap with custom reference label colors
 plot_binary_TSP(Data = merged_expressionset_val,               # Your data object
@@ -1424,20 +1440,18 @@ plot_binary_TSP(Data = merged_expressionset_val,               # Your data objec
                 margin = c(0,6,0,6))
 dev.off()
 
-# Create the platform color legend
-library(ComplexHeatmap)
 
-platform_legend_val <- Legend(
-  title = "Platform/Stud",
-  at = names(colors_val),
-  legend_gp = gpar(fill = colors_val),   # Colors for the legend
-  ncol = 1 ,                                  # Number of rows in the legend
-  title_gp = gpar(fontsize = 14, fontface = "bold", col = "black"),  # Bold, black title
-  labels_gp = gpar(fontsize = 12, fontface = "bold", col = "black")  # Bold, black labels
-)
+#platform_legend_val <- Legend(
+  #title = "Platform/Stud",
+  #at = names(colors_val),
+  #legend_gp = gpar(fill = colors_val),   # Colors for the legend
+  #ncol = 1 ,                                  # Number of rows in the legend
+  #title_gp = gpar(fontsize = 14, fontface = "bold", col = "black"),  # Bold, black title
+  #labels_gp = gpar(fontsize = 12, fontface = "bold", col = "black")  # Bold, black labels
+#)
 
 
 # Save the platform legend as a separate plot
-png('Figures/platform_legend_val.png', res = 600, units = "in", width = 14, height = 6, bg = "white")
-draw(platform_legend_val)
-dev.off()
+#png('../results/Figures/platform_legend_val.png', res = 600, units = "in", width = 14, height = 6, bg = "white")
+#draw(platform_legend_val)
+#dev.off()

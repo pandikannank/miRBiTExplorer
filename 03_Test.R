@@ -1,3 +1,6 @@
+
+# 03_Test -----------------------------------------------------------------
+
 #This code will reproduce the pre-processing of Test Data and the classifier performance
 #Fig-4A,4B,4C,4D,4E can be generated.
 ########################Preprocessing###########################################
@@ -68,7 +71,7 @@ ggplot(tsne_coords_GSE106817, aes(x = V1, y = V2, color = Category)) +
     legend.text = element_text(size = 12, face = "bold"), # Increase legend text size
     legend.title = element_text(size = 14, face = "bold") # Increase legend title size
   )
-ggsave("Figures/t-sne_GSE106817.png")
+#ggsave("Figures/t-sne_GSE106817.png")
 
 GSE106817_expset <-ExpressionSet(GSE106817mat, phenoData = phenoData_GSE106817)
 results_GSE106817 <- predict_one_vs_rest_TSP(classifier = classifier_train,
@@ -180,7 +183,7 @@ ggplot(tsne_coords_GSE112264, aes(x = V1, y = V2, color = Category)) +
     legend.title = element_text(size = 14, face = "bold") # Increase legend title size
   )
 
-ggsave("Figures/t-sne_GSE112264.png")
+#ggsave("Figures/t-sne_GSE112264.png")
 
 GSE112264_expset <-ExpressionSet(GSE112264mat, phenoData = phenoData_GSE112264)
 results_GSE112264 <- predict_one_vs_rest_TSP(classifier = classifier_train,
@@ -200,7 +203,6 @@ plot_confusion_matrix(confusion_GSE112264, "Confusion Matrix for GSE112264")
 
 expr_subset_GSE112264 <- GSE112264_frame[rownames(GSE112264_frame) %in% miRNAs_to_plot, ]
 
-library(tidyverse)
 expr_long_GSE112264 <- expr_subset_GSE112264 %>%
   as.data.frame() %>%
   rownames_to_column(var = "Gene") %>%
@@ -301,7 +303,7 @@ ggplot(tsne_coords_GSE113486, aes(x = V1, y = V2, color = Category)) +
     legend.title = element_text(size = 14, face = "bold") # Increase legend title size
   )
 
-ggsave("Figures/t-sne_GSE113486.png")
+#ggsave("Figures/t-sne_GSE113486.png")
 
 
 GSE113486_expset <-ExpressionSet(GSE113486mat, phenoData = phenoData_GSE113486)
@@ -421,7 +423,7 @@ ggplot(tsne_coords_GSE113740, aes(x = V1, y = V2, color = Category)) +
     legend.title = element_text(size = 14, face = "bold") # Increase legend title size
   )
 
-ggsave("Figures/t-sne_GSE113740.png", dpi = 600, bg = "white")
+#ggsave("Figures/t-sne_GSE113740.png", dpi = 600, bg = "white")
 
 
 GSE113740_expset <-ExpressionSet(GSE113740mat, phenoData = phenoData_GSE113740)
@@ -445,14 +447,12 @@ print(confusion_GSE113740)
 
 plot_confusion_matrix(confusion_GSE113740, "Confusion Matrix for GSE113740")
 
-ggsave("Figures/confusion_GSE113740.png", dpi = 600, bg = "white")
+#ggsave("Figures/confusion_GSE113740.png", dpi = 600, bg = "white")
 
 #write.csv(as.data.frame(confusion_GSE113740$table), "final4_confusion_matrix_GSE113740.csv")
 #write.csv(meta_GSE113740, "meta_all_GSE113740.csv")
 
 expr_subset_GSE113740 <- GSE113740_frame[rownames(GSE113740_frame) %in% miRNAs_to_plot, ]
-
-library(tidyverse)
 
 # Convert expression data to long format for ggplot
 expr_long_GSE113740 <- expr_subset_GSE113740 %>%
@@ -562,8 +562,7 @@ ggplot(tsne_coords_GSE122497, aes(x = V1, y = V2, color = Category)) +
     legend.title = element_text(size = 14, face = "bold") # Increase legend title size
   )
 
-ggsave("Figures_t-sne_GSE122497.png")
-
+#ggsave("Figures_t-sne_GSE122497.png")
 
 results_GSE122497 <- predict_one_vs_rest_TSP(classifier = classifier_train,
                                              Data = GSE122497_expset,
@@ -672,7 +671,7 @@ ggplot(tsne_coords_GSE137140, aes(x = V1, y = V2, color = Category)) +
     legend.text = element_text(size = 12, face = "bold"), # Increase legend text size
     legend.title = element_text(size = 14, face = "bold") # Increase legend title size
   )
-ggsave("Figures/t-sne_GSE137140.png")
+#ggsave("Figures/t-sne_GSE137140.png")
 
 
 GSE137140_expset <-ExpressionSet(GSE137140mat, phenoData = phenoData_GSE137140)
@@ -785,7 +784,7 @@ ggplot(tsne_coords_GSE139031, aes(x = V1, y = V2, color = Category)) +
     legend.title = element_text(size = 14, face = "bold") # Increase legend title size
   )
 
-ggsave("Figures/t-sne_GSE139031.png")
+#ggsave("Figures/t-sne_GSE139031.png")
 
 
 GSE139031_expset <-ExpressionSet(GSE139031mat, phenoData = phenoData_GSE139031)
@@ -899,7 +898,7 @@ ggplot(tsne_coords_GSE164174, aes(x = V1, y = V2, color = Category)) +
     legend.title = element_text(size = 14, face = "bold") # Increase legend title size
   )
 
-ggsave("Figures/t-sne_GSE164174.png")
+#ggsave("Figures/t-sne_GSE164174.png")
 
 GSE164174_expset <-ExpressionSet(GSE164174mat, phenoData = phenoData_GSE164174)
 results_GSE164174 <- predict_one_vs_rest_TSP(classifier = classifier_train,
@@ -1060,7 +1059,7 @@ ggplot(tsne_coords_GSE73002, aes(x = V1, y = V2, color = Category)) +
     legend.text = element_text(size = 12, face = "bold"), # Increase legend text size
     legend.title = element_text(size = 14, face = "bold") # Increase legend title size
   )
-ggsave("Figures/tsne_GSE73002_nona.png")
+#ggsave("Figures/tsne_GSE73002_nona.png")
 
 results_GSE73002 <- predict_one_vs_rest_TSP(classifier = classifier_train,
                                             Data = GSE73002_expset,
@@ -1175,13 +1174,11 @@ ggplot(summary_data_dist, aes(x = dataset, y = description, fill = class)) +
     legend.text = element_text(face = "bold", size = 12)                         # Bold legend text
   )
 
-ggsave("Figures/4A_distribution_test.png", dpi = 600, bg = "white", width = 10, height = 12)
+ggsave("../results/Figures/4A_distribution_test.png", dpi = 600, bg = "white", width = 10, height = 12)
 
 
 # beeswarm_test -----------------------------------------------------------
 
-library(ggbeeswarm)
-library(gridExtra)
 
 # Define the function to create and save beeswarm plots with specific colors for labels
 create_beeswarm_plots_test <- function(dataset, dataset_name) {
@@ -1236,7 +1233,7 @@ create_beeswarm_plots_test <- function(dataset, dataset_name) {
                               top = paste("Beeswarm Plots of Expression Levels for Top 4 Rules in", dataset_name))
     
     # Save the 2x2 grid of beeswarm plots as a single image in the "Figures/" directory
-    ggsave(paste0("Figures/Beeswarm_Plots_", dataset_name, ".png"), grid_plot,
+    ggsave(paste0("../results/Figures/Beeswarm_Plots_", dataset_name, ".png"), grid_plot,
            dpi = 600, width = 24, height = 12, units = "cm")
   }
 }
@@ -1295,7 +1292,7 @@ ggplot(all_cm, aes(x = Prediction, y = Reference, fill = Freq)) +
   )
 
 
-ggsave("Figures/4B_Confusion_Matrix_test.png", dpi = 600, bg = "white", height = 12, width = 16)
+ggsave("../results/Figures/4B_Confusion_Matrix_test.png", dpi = 600, bg = "white", height = 12, width = 16)
 
 # 4C_Test_merged -------------------------------------------------------------
 
@@ -1352,7 +1349,7 @@ print(confusion_test_merged)
 
 plot_confusion_matrix(confusion_test_merged, "Confusion Matrix for Test_Datasets")
 
-ggsave("Figures/confusion_merged_Test.png")
+#ggsave("Figures/confusion_merged_Test.png")
 
 descrip_test <- combined_data_dist %>%
   dplyr::select(class, description, dataset)
@@ -1397,7 +1394,7 @@ colors
 
 ref_colors <- c("cancer" = "red", "non_cancer" = "blue")
 
-png('Figures/test_merged.png', res = 600, units = "in", width = 22, height = 10, bg = "white")
+png('../results/Figures/4C_test_merged.png', res = 600, units = "in", width = 22, height = 10, bg = "white")
 
 # Plot the heatmap with custom reference label colors
 plot_binary_TSP(Data = merged_expressionset,               # Your data object
@@ -1419,18 +1416,19 @@ dev.off()
 
 library(ComplexHeatmap)
 
-platform_legend_test <- Legend(
-  title = "Platform/Study",
-  at = names(colors),
-  legend_gp = gpar(fill = colors),   # Colors for the legend
-  ncol = 2,                                  # Number of rows in the legend
-  title_gp = gpar(fontsize = 14, fontface = "bold", col = "black"),  # Bold, black title
-  labels_gp = gpar(fontsize = 12, fontface = "bold", col = "black")  # Bold, black labels
-)
+#platform_legend_test <- Legend(
+  #title = "Platform/Study",
+  #at = names(colors),
+  #legend_gp = gpar(fill = colors),   # Colors for the legend
+  #ncol = 2,                                  # Number of rows in the legend
+  #title_gp = gpar(fontsize = 14, fontface = "bold", col = "black"),  # Bold, black title
+  #labels_gp = gpar(fontsize = 12, fontface = "bold", col = "black")  # Bold, black labels
+#)
 
 # Save the platform legend as a separate plot
-png('Figures/test_merged_platform_legend.png', res = 600, units = "in", width = 14, height = 6, bg = "white")
-draw(platform_legend_test)
+#png('Figures/test_merged_platform_legend.png', res = 600, units = "in", width = 14, height = 6, bg = "white")
+#draw(platform_legend_test)
+
 dev.off()
 
 # 4D_Performance_metrices_heatmap_Test ---------------------------------------
@@ -1466,35 +1464,8 @@ cm_metrics <- data.frame(
 )
 
 
-# Load required libraries
-library(tidyr)
-library(tidyverse)
-library(dplyr)
-library(ggplot2)
-library(scales)
-
 # Reshape the data to long format (if not already done)
 cm_metrics_long <- pivot_longer(cm_metrics, cols = -Dataset, names_to = "Metric", values_to = "Value")
-
-# Bar plot for metrics with a custom light blue-green palette
-ggplot(cm_metrics_long, aes(x = Dataset, y = Value, fill = Metric)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  coord_flip() +
-  labs(title = "Performance Metrics for Multiple Datasets",
-       x = "Dataset", 
-       y = "Metric Value") +
-  scale_fill_manual(values = c("#AEDFF7", "#7FB3D5", "#2E86C1", "#85C1E9", "#73C6B6", "#1ABC9C")) +  # Custom light color palette
-  theme_minimal() +
-  theme(
-    legend.position = "top",  # Move legend to the top
-    legend.title = element_blank(),  # Remove the legend title
-    axis.text = element_text(size = 10),  # Improve axis text readability
-    strip.text = element_text(size = 12, face = "bold"),  # Improve facet text size
-    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),  # Title size and alignment
-    axis.title = element_text(size = 12),  # Axis title size
-    axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate x-axis text for better readability
-  ) +
-  scale_y_continuous(labels = percent)  # Convert y-axis to percentage representation
 
 # Heatmap plot with a lighter blue gradient for readability
 ggplot(cm_metrics_long, aes(x = Metric, y = Dataset, fill = Value)) +
@@ -1512,8 +1483,6 @@ ggplot(cm_metrics_long, aes(x = Metric, y = Dataset, fill = Value)) +
         strip.text = element_text(size = 12, face = "bold")) +  # Bold and larger facet labels
   scale_x_discrete(expand = c(0.1, 0.1))  # Add some spacing for x-axis labels
 
-
-library(scales)  # For percent() function
 
 ggplot(cm_metrics_long, aes(x = Metric, y = Dataset, fill = Value)) +
   geom_tile(color = "white") +
@@ -1537,7 +1506,7 @@ ggplot(cm_metrics_long, aes(x = Metric, y = Dataset, fill = Value)) +
   ) +
   scale_x_discrete(expand = c(0.1, 0.1))  # Add some spacing for x-axis labels
 
-ggsave("heatmap_metrices_bold_ordered.png", dpi = 600, bg = "white", height = 6, width = 8)
+#ggsave("../results/Figures/4D_heatmap_metrices_bold_ordered.png", dpi = 600, bg = "white", height = 6, width = 8)
 
 # Order of the levels for the Dataset column
 cm_metrics_long$Dataset <- factor(cm_metrics_long$Dataset, 
@@ -1597,7 +1566,7 @@ ggplot(cm_metrics_long, aes(x = Metric, y = Dataset, fill = Value)) +
   scale_y_discrete(limits = sort(unique(cm_metrics_long$Dataset)))  # Sort y-axis labels in ascending order
 
 
-ggsave("Figures/4C_wb_heatmap_metrices_bold_short.png")
+ggsave("../results/Figures/4D_wb_heatmap_metrices_bold_short.png")
 
 
 # 4E_ROC_Test ----------------------------------------------------------------
@@ -1778,4 +1747,4 @@ ggplot(all_roc, aes(x = FPR, y = TPR, color = Dataset)) +
     plot.margin = margin(5, 5, 5, 5)  # Adjust plot margins
   )
 
-ggsave("Figures/4D_roc_plots_bold_benign.png", dpi = 600, bg = "white", height = 8, width = 8)
+ggsave("../results/Figures/4E_roc_plots_bold_benign.png", dpi = 600, bg = "white", height = 8, width = 8)

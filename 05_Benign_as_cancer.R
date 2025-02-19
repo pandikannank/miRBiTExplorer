@@ -1,3 +1,6 @@
+
+# 05_Benignascancer -------------------------------------------------------
+
 #This code will reproduce the analysis when benign is considered cancer/benign class and comparisons
 #Fig-6A,6B,6C,6D,6E,6F,6G,6H can be generated.
 
@@ -43,7 +46,7 @@ confusion_GSE112264_neo <- caret::confusionMatrix(data = factor(results_GSE11226
                                                   mode="everything")
 print(confusion_GSE112264_neo)
 
-plot_confusion_matrix(confusion_GSE112264_neo, "Confusion Matrix for GSE112264_neo")
+#plot_confusion_matrix(confusion_GSE112264_neo, "Confusion Matrix for GSE112264_neo")
 
 expr_subset_GSE112264_neo <- GSE112264mat[rownames(GSE112264mat) %in% miRNAs_to_plot, ]
 
@@ -95,10 +98,9 @@ confusion_GSE113740_neo <- caret::confusionMatrix(data = factor(results_GSE11374
                                                   mode="everything")
 print(confusion_GSE113740_neo)
 
-
 plot_confusion_matrix(confusion_GSE113740_neo, "Confusion Matrix for GSE113740_neo")
 
-ggsave("neoplasm/confusion_GSE113740_neo.png")
+#ggsave("neoplasm/confusion_GSE113740_neo.png")
 
 expr_subset_GSE113740_neo <- GSE113740mat[rownames(GSE113740mat) %in% miRNAs_to_plot, ]
 
@@ -151,7 +153,7 @@ print(confusion_GSE137140_neo)
 
 
 plot_confusion_matrix(confusion_GSE137140_neo, "Confusion Matrix for GSE137140_neo")
-ggsave("neoplasm/confusion_GSE137140_neo.png")
+#ggsave("neoplasm/confusion_GSE137140_neo.png")
 
 expr_subset_GSE137140_neo <- GSE137140mat[rownames(GSE137140mat) %in% miRNAs_to_plot, ]
 
@@ -178,7 +180,7 @@ confusion_GSE139031_neo <- caret::confusionMatrix(data = factor(results_GSE13903
 print(confusion_GSE139031_neo)
 
 plot_confusion_matrix(confusion_GSE139031_neo, "Confusion Matrix for GSE139031_neo")
-ggsave("neoplasm/confusion_GSE139031_neo.png")
+#ggsave("neoplasm/confusion_GSE139031_neo.png")
 
 expr_subset_GSE139031_neo <- GSE139031mat[rownames(GSE139031mat) %in% miRNAs_to_plot, ]
 
@@ -238,7 +240,7 @@ expr_subset_GSE73002_neo <- GSE73002mat[rownames(GSE73002mat) %in% miRNAs_to_plo
 
 ggplot(all_cm, aes(x = Prediction, y = Reference, fill = Freq)) +
   geom_tile(color = "white") +
-  geom_text(aes(label = Freq), color = "black", fontface = "bold", size = 14) +  # Bold the text in tiles
+  geom_text(aes(label = Freq), color = "black", fontface = "bold", size = 8) +  # Bold the text in tiles
   facet_wrap(~ Dataset, ncol = 3) +
   scale_fill_gradient(low = "lavender", high = "lightblue") +
   theme_minimal() +
@@ -250,12 +252,12 @@ ggplot(all_cm, aes(x = Prediction, y = Reference, fill = Freq)) +
     axis.title.y = element_text(face = "bold", size = 24, color = "black"),  # Bold y-axis title
     axis.text.x = element_text(face = "bold", size = 22, color = "black"),   # Bold x-axis text
     axis.text.y = element_text(face = "bold", size = 22, color = "black"),   # Bold y-axis text
-    strip.text = element_text(face = "bold", size = 28, color = "black"),    # Bold facet titles
+    strip.text = element_text(face = "bold", size = 24, color = "black"),    # Bold facet titles
     legend.text = element_text(face = "bold", size = 18),  # Bold and increase legend text size
     legend.title = element_text(face = "bold", size = 16)  # Bold and increase legend title size
   )
 
-ggsave("Figures/Confusion_benignasnon-cancer_test.png")
+ggsave("../results/Figures/6A_Confusion_benignasnon-cancer_test.png", dpi = 600, bg = "white", height = 12, width = 16)
 
 # 6B_ConfusionMatrix_BenignasCancer ----------------------------------------------
 
@@ -303,14 +305,14 @@ ggplot(all_cm_neo, aes(x = Prediction, y = Reference, fill = Freq)) +
     legend.title = element_text(face = "bold", size = 26)  # Bold and increase legend title size
   )
 
-ggsave("Figures/Confusion_Matrix_withbenignascancer_testlabelsdata.png", dpi = 600, bg = "white", height = 18, width = 24)
+ggsave("../results/Figures/6B_Confusion_Matrix_withbenignascancer_testlabelsdata.png", dpi = 600, bg = "white", height = 12, width = 14)
 
 
 
 # 6C_Train_benignas_non_cancer --------------------------------------------
 
 plot_confusion_matrix(confusion_train, "Confusion Matrix for Training data")
-ggsave("Figures/Confusion_benignasnon-cancer_train.png")
+ggsave("../results/Figures/6C_Confusion_benignasnon-cancer_train.png", dpi = 600, height = 8, width = 8)
 
 
 # 6D_Train_benign_Visualization ----------------------------------------------
@@ -335,7 +337,7 @@ ggplot(tsne_coords_benign, aes(x = V1, y = V2, color = Category)) +
   scale_color_manual(values = c("cancer" = "red", "non_cancer" = "blue", "benign" = "darkorange")) +
   theme(legend.position = "right")
 
-ggsave("Figures/t-sne_train_with_benign.png")
+#ggsave("Figures/t-sne_train_with_benign.png")
 
 
 #Train_data_when benign is considered "cancer/benign" group
@@ -385,14 +387,13 @@ ggplot(cm_table_neotrain, aes(x = Prediction, y = Reference, fill = Freq)) +
     legend.text = element_text(face = "bold", size = 16),  # Bold and increase legend text size
     legend.title = element_text(face = "bold", size = 16)  # Bold and increase legend title size
   )
-ggsave("merged_confusion_Train_benign as cancer.png")
+ggsave("../results/Figures/6D_merged_confusion_Train_benign as cancer.png", dpi = 600, height = 12, width = 12)
 
 
 # 6E_Test_Benignasnon_cancer_merged_conf ----------------------------------
 
 plot_confusion_matrix(confusion_test_merged, "Confusion Matrix for Test_Datasets")
-ggsave("Figures/confusion_merged_Test.png")
-
+ggsave("../results/Figures/6E_confusion_merged_Test.png", dpi = 600, height = 12, width = 12)
 
 
 # 6F_ Merged_confusion_benignascancer_merged_conf --------------------------------------------------------
@@ -448,7 +449,7 @@ confusion_test_neo <- caret::confusionMatrix(
 print(confusion_test_neo)
 plot_confusion_matrix(confusion_test_neo, "Confusion Matrix for Neo Datasets")
 
-ggsave("merged_confusion_Test_benign as cancer.png")
+ggsave("../results/Figures/6F_merged_confusion_Test_benign as cancer.png", dpi = 600, height = 12, width = 12)
 
 # 6G_PerformanceMetrices_BenignasCancer_Test --------------------------------------
 
@@ -513,7 +514,7 @@ ggplot(cm_metrics_long_neo, aes(x = Metric, y = Dataset, fill = Value)) +
   scale_x_discrete(expand = c(0.1, 0.1)) +  # Add some spacing for x-axis labels
   scale_y_discrete(limits = sort(unique(cm_metrics_long$Dataset)))  # Sort y-axis labels in ascending order
 
-ggsave("Figures/wb_heatmap_metrices_benignneo.png")
+ggsave("../results/Figures/6G_heatmap_metrices_benignneo.png",, dpi = 600, height = 10, width = 20)
 
 
 # 6H_ROC_BenignasCancer ------------------------------------------------------
@@ -681,5 +682,5 @@ ggplot(all_roc_neo, aes(x = FPR, y = TPR, color = Dataset)) +
     plot.margin = margin(5, 5, 5, 5)  # Adjust plot margins
   )
 
-ggsave("roc_plots_bold_benignascancer.png", dpi = 600, bg = "white", height = 8, width = 16)
+ggsave("../results/Figures/6H_roc_plots_bold_benignascancer.png", dpi = 600, bg = "white", height = 8, width = 16)
 

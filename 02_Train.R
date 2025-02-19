@@ -1,11 +1,15 @@
+
+# #02_Train ---------------------------------------------------------------
+
 #This code will reproduce the pre-processing of Training Data and Training the classifier
 #Fig-2A,2C,2D,2E,2F,2G,2H,3A,3B,3D,3E
 ########################Preprocessing###########################################
 
+setwd("../data/")
 
 #Training_data_GSE211692
-training_data = read.delim('train/GSE211692_processed_data_matrix.txt', header = T)
-
+data <- fread("https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE211692&format=file&file=GSE211692%5Fprocessed%5Fdata%5Fmatrix%2Etxt%2Egz")
+training_data <- as.data.frame(data)
 #Download the clinical metadata from GEO
 GSE211692= getGEO(GEO = "GSE211692",GSEMatrix = TRUE)
 metadata_GSE211692 = pData(phenoData(GSE211692[[1]]))
@@ -24,15 +28,16 @@ colnames(training_data) <- sapply(colnames(training_data), function(col) {
 })
 
 #select the necessary columns
-metadata.subset_GSE211692 = dplyr::select(metadata_GSE211692,c(2,10))
-frequency_table_GSE211692 <- table(metadata.subset_GSE211692$characteristics_ch1)
+metadata.subset_GSE211692 = dplyr::select(metadata_GSE211692,c(2,38))
+frequency_table_GSE211692 <- table(metadata.subset_GSE211692$`disease state:ch1`)
 
 
 # 2A_Disease state Visualization ------------------------------------------
-
+meta_train <- read.csv("train/meta_train_full.csv", row.names = 1, stringsAsFactors = TRUE)
 metadisttrain <- metadata.subset_GSE211692
 metadisttrain$class <- meta_train$class
 metadisttrain$title <- rownames(meta_train)
+colnames(metadisttrain)[2] <- "state"
 
 # Prepare data for plotting
 state_data <- metadisttrain %>%
@@ -50,7 +55,7 @@ ggplot(state_data, aes(x = n, y = state, color = class, group = state)) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(size = 12, face = "bold", color = "black"),
-    axis.text.y = element_text(size = 14, face = "bold", color = "black"),
+    axis.text.y = element_text(size = 12, face = "bold", color = "black"),
     axis.title = element_text(size = 16, face = "bold"),
     plot.title = element_text(size = 16, face = "bold"),
     legend.title = element_text(size = 18, face = "bold"),
@@ -64,7 +69,7 @@ ggplot(state_data, aes(x = n, y = state, color = class, group = state)) +
   ) +
   coord_cartesian(clip = "off")  # Ensure labels outside the plot boundary are visible
 
-ggsave("Figures/2ASample_distribution_plot.png",height = 8, width = 10)
+ggsave("../results/Figures/2ASample_distribution_plot.png",height = 10, width = 16)
 
 # organize
 metadata.subset_GSE211692 = metadata_GSE211692 %>%
@@ -124,7 +129,7 @@ highframe_train <- as.data.frame(highly_expressed_train)
 
 # 2C_t-SNE_Visualization --------------------------------------------------
 
-umap_result <- umap(t(highframe_train))# Plot UMAP with specific colors for cancer and non-cancer
+umap_result <- umap(t(highframe_train))# Plot UMAP with specific colors for cancer and non_cancer
 umap_coords <- as.data.frame(umap_result$layout)
 colnames(umap_coords) <- c("UMAP1", "UMAP2")
 umap_coords$State <- meta_train$class[match(rownames(umap_coords), metadata.subset_GSE211692$geo_accession)]
@@ -147,7 +152,7 @@ ggplot(tsne_coords, aes(x = V1, y = V2, color = Category)) +
   scale_color_manual(values = c("cancer" = "red", "non_cancer" = "blue")) +
   theme(legend.position = "right")
 
-ggsave("Figures/2Ct-sne_train.png")
+ggsave("../results/Figures/2Ct-sne_train.png")
 
 
 ###################Training Single Sample Classifier############################
@@ -279,7 +284,7 @@ ggplot(combined_df, aes(x = miRNA_pair, y = score, fill = class)) +
     plot.margin = margin(10, 10, 10, 40)  # Add more space on the left and right side of the plot
   )
 
-#ggsave("Figures/2D_mirna_pairs.png", height = 12, width = 12)
+ggsave("../results/Figures/2D_mirna_pairs.png", height = 12, width = 12)
 
 
 #Individual_Rules_Performance
@@ -401,7 +406,7 @@ cm_plots <- lapply(names(confusion_matrices), function(rule_name) {
 # Arrange the confusion matrices in a grid
 grid <- grid.arrange(grobs = cm_plots, ncol = 2)  # Adjust `ncol` based on the number of rules
 
-#ggsave("Figures/2E_train_bold_confusionmatrices.png", grid, dpi = 600, bg = "white", width = 15, height = 10)
+ggsave("../results/Figures/2E_train_bold_confusionmatrices.png", grid, dpi = 600, bg = "white", width = 15, height = 10)
 
 ## Expression of each miRNAs between two classes
 expr_long_train <- expr_subset_train %>%
@@ -462,7 +467,7 @@ create_beeswarm_plots <- function(dataset, dataset_name) {
     dir.create("train", showWarnings = FALSE)
     
     # Save the arranged plots as a single image (grid) in the "train/" directory
-    ggsave(filename = paste0("Figures/3ABeeswarm_Plots_", dataset_name, ".png"), 
+    ggsave(filename = paste0("../results/Figures/3ABeeswarm_Plots_", dataset_name, ".png"), 
            plot = grid_plot, width = 24, height = 12, units = "cm")
   }
 }
@@ -575,7 +580,7 @@ ggplot(performance_long, aes(x = Rule, y = MetricType, fill = Metric)) +
     strip.text = element_text(face = "bold", size = 12)                     # Make facet strip text bold
   )
 
-ggsave("Figures/3B_performance_metrics_train_individual_ordered.png",height = 6, width = 8)
+ggsave("../results/Figures/3B_performance_metrics_train_individual_ordered.png",height = 6, width = 8)
 
 
 # 3D_Confusion_matrix_train_for classifier ----------------------------
@@ -587,7 +592,7 @@ confusion_train <- caret::confusionMatrix(
 print(confusion_train)
 plot_confusion_matrix(confusion_train, "Confusion Matrix for Training data")
 
-ggsave("Figures/3D_train_confusion.png")
+ggsave("../results/Figures/3D_train_confusion.png")
 
 
 #  3E Visualize_Classifier_results_in comparison to actual lab --------
@@ -617,6 +622,8 @@ platform_colors <- c(
 
 ref_colors <- c("cancer" = "red", "non_cancer" = "blue")
 
+png('../results/Figures/3Efinal4traincomp.png', res = 600, units = "in", width = 16, height = 9, bg = "white")
+
 # Plot the heatmap with custom reference label colors
 plot_binary_TSP(Data = train_object,        
                 classifier = classifier_train,
@@ -633,7 +640,9 @@ plot_binary_TSP(Data = train_object,
                 pred_col = ref_colors,
                 margin = c(0,6,0,6)) 
 
-# Create the platform color legend
+dev.off()
+
+# Create the state color legend
 platform_legend <- Legend(
   title = "Platform/Study",
   at = names(platform_colors),
