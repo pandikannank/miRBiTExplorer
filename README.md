@@ -6,7 +6,7 @@ Before starting, download all the files from https://zenodo.org/records/14906312
 
 01_Packages.R contains all the necessary R libraries that needs to be loaded to perform the analysis. These packages can be downloaded from https://stat.ethz.ch/R-manual/R-devel/library/base/html/00Index.html or Bioconductor https://www.bioconductor.org/
 
-02_Train.R contains the code to reproduce the pre-processing of Training Data and single-sample classifier training. Fig-2A,2C,2D,2E,2F,2G,2H,3A,3B,3D,3E can be generate with the code.
+02_Train.R contains the code to reproduce the pre-processing of Training Data and single-sample classifier training. Fig-2A,2C,2D,2E,2F,2G,2H,3A,3B,3D,3E can be generated with the code.
 
 03_Test.R contains the code to reproduce the pre-processing of Test Data and the classifier performance. Fig-4A,4B,4C,4D,4E can be generated with this code.
 
